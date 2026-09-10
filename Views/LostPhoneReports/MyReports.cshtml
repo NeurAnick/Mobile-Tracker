@@ -1,0 +1,193 @@
+﻿@model List<MobileTracker.Models.LostPhoneReport>
+
+@{
+    ViewData["Title"] = "My Reports";
+}
+
+<style>
+    .reports-page {
+        background: #f8fafc;
+        min-height: 80vh;
+        padding: 45px 0 70px;
+    }
+
+    .reports-header {
+        margin-bottom: 30px;
+    }
+
+    .reports-header h2 {
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .reports-header p {
+        color: #64748b;
+    }
+
+    .report-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 18px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+        border: 1px solid #eef2f7;
+    }
+
+    .case-id {
+        color: #2563eb;
+        font-size: 1.15rem;
+        font-weight: 800;
+    }
+
+    .device-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #172554;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-bottom: 3px;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .status-badge {
+        display: inline-block;
+        background: #eff6ff;
+        color: #2563eb;
+        border-radius: 20px;
+        padding: 7px 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .empty-card {
+        background: white;
+        border-radius: 20px;
+        padding: 60px 30px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .empty-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="reports-page">
+
+    <div class="container">
+
+        <div class="reports-header">
+            <h2>My Reports</h2>
+            <p>View and track all lost phone reports submitted from your account.</p>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var report in Model)
+            {
+                <div class="report-card">
+
+                    <div class="row align-items-center g-4">
+
+                        <div class="col-md-2">
+                            <div class="info-label">Case ID</div>
+                            <div class="case-id">
+                                #@report.CaseId
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="info-label">Device</div>
+                            <div class="device-name">
+                                @report.Brand @report.Model
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="info-label">Color</div>
+                            <div class="info-value">
+                                @report.Color
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="info-label">Date of Loss</div>
+                            <div class="info-value">
+                                @report.DateOfLoss.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="info-label">Location</div>
+                            <div class="info-value">
+                                @report.LocationLost
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 text-md-end">
+                            <span class="status-badge">
+                                @report.Status
+                            </span>
+
+                            <div class="mt-2">
+                                <a asp-controller="LostPhoneReports"
+                                   asp-action="Details"
+                                   asp-route-id="@report.CaseId"
+                                   class="btn btn-sm btn-outline-primary rounded-3">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-card">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h4 class="fw-bold">
+                    No Reports Found
+                </h4>
+
+                <p class="text-muted">
+                    You haven't submitted any lost phone reports yet.
+                </p>
+
+                <a asp-controller="LostPhoneReports"
+                   asp-action="Create"
+                   class="btn btn-primary rounded-3 px-4">
+                    Report Lost Phone
+                </a>
+
+            </div>
+        }
+
+        <div class="mt-4">
+
+            <a asp-controller="Home"
+               asp-action="Dashboard"
+               class="btn btn-outline-secondary rounded-3">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
