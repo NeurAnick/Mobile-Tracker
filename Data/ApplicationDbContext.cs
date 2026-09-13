@@ -15,6 +15,12 @@ namespace MobileTracker.Data
 
         public DbSet<LostPhoneReport> LostPhoneReports { get; set; }
 
+        public DbSet<Thana> Thanas { get; set; }
+
+        public DbSet<GDInfo> GDInfos { get; set; }
+        public DbSet<PolicyAcceptance> PolicyAcceptances { get; set; }
+
+        public DbSet<CaseStatusHistory> CaseStatusHistories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

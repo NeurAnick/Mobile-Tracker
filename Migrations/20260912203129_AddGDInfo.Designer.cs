@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobileTracker.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MobileTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912203129_AddGDInfo")]
+    partial class AddGDInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,35 +24,6 @@ namespace MobileTracker.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("MobileTracker.Models.CaseStatusHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("LostPhoneReportCaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LostPhoneReportCaseId");
-
-                    b.ToTable("CaseStatusHistories");
-                });
 
             modelBuilder.Entity("MobileTracker.Models.GDInfo", b =>
                 {
@@ -123,9 +97,6 @@ namespace MobileTracker.Migrations
                     b.Property<decimal?>("RewardAmount")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("SolvedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -145,30 +116,6 @@ namespace MobileTracker.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("LostPhoneReports");
-                });
-
-            modelBuilder.Entity("MobileTracker.Models.PolicyAcceptance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AcceptedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("PolicyVersion")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PolicyAcceptances");
                 });
 
             modelBuilder.Entity("MobileTracker.Models.Thana", b =>
@@ -229,15 +176,6 @@ namespace MobileTracker.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("MobileTracker.Models.CaseStatusHistory", b =>
-                {
-                    b.HasOne("MobileTracker.Models.LostPhoneReport", "LostPhoneReport")
-                        .WithMany()
-                        .HasForeignKey("LostPhoneReportCaseId");
-
-                    b.Navigation("LostPhoneReport");
                 });
 
             modelBuilder.Entity("MobileTracker.Models.GDInfo", b =>

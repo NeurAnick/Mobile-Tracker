@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MobileTracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+083b361b9917c8900aeabcd4a6c08f7af00f2222")]
 [assembly: System.Reflection.AssemblyProductAttribute("MobileTracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MobileTracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
