@@ -34,6 +34,10 @@ namespace MobileTracker.Models
         [StringLength(200)]
         public string LocationLost { get; set; } = string.Empty;
 
+
+        [Range(0, 100000000,
+           ErrorMessage = "Reward amount cannot be negative.")]
+
         public decimal? RewardAmount { get; set; }
 
         [Required]
@@ -41,6 +45,8 @@ namespace MobileTracker.Models
         public string Status { get; set; } = "Submitted";
 
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? SolvedAt { get; set; } 
+
         public User? User { get; set; }
     }
 }
