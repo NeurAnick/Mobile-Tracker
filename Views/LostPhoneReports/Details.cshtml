@@ -1,0 +1,324 @@
+﻿@model MobileTracker.Models.LostPhoneReport
+
+@{
+    ViewData["Title"] = "Case Details";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+
+                        <div>
+                            <p class="text-muted mb-1">
+                                Lost Phone Case
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                Case #@Model.CaseId
+                            </h2>
+                        </div>
+
+                        <span class="badge bg-primary rounded-pill px-3 py-2">
+                            @Model.Status
+                        </span>
+
+                    </div>
+
+                    <hr />
+
+                    <h5 class="fw-bold mb-4">
+                        Device Information
+                    </h5>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Brand</small>
+                            <div class="fw-semibold">
+                                @Model.Brand
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Model</small>
+                            <div class="fw-semibold">
+                                @Model.Model
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Color</small>
+                            <div class="fw-semibold">
+                                @Model.Color
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">IMEI</small>
+                            <div class="fw-semibold">
+                                @Model.IMEI
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Date of Loss</small>
+                            <div class="fw-semibold">
+                                @Model.DateOfLoss.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Location Lost</small>
+                            <div class="fw-semibold">
+                                @Model.LocationLost
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Reward Amount</small>
+                            <div class="fw-semibold">
+                                @if (Model.RewardAmount.HasValue)
+                                {
+                                    <span>৳ @Model.RewardAmount.Value.ToString("N0")</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not specified</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted">Submitted At</small>
+                            <div class="fw-semibold">
+                                @Model.SubmittedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- GD INFORMATION -->
+
+                    <hr class="my-4" />
+
+                    <h5 class="fw-bold mb-4">
+                        GD Information
+                    </h5>
+
+                    @if (ViewBag.GDInfo != null)
+                    {
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    GD Number
+                                </small>
+
+                                <div class="fw-semibold">
+                                    @ViewBag.GDInfo.GDNumber
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    Thana
+                                </small>
+
+                                <div class="fw-semibold">
+                                    @ViewBag.GDInfo.Thana.ThanaName
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    District
+                                </small>
+
+                                <div class="fw-semibold">
+                                    @ViewBag.GDInfo.Thana.District
+                                </div>
+                            </div>
+
+                            
+                            @if (ViewBag.GDInfo != null && !string.IsNullOrEmpty(ViewBag.GDInfo.GDPhotoPath))
+                            {
+                                <div class="col-12">
+
+                                    <small class="text-muted d-block mb-2">
+                                        GD Photo
+                                    </small>
+
+                                    <a href="@Url.Content(ViewBag.GDInfo.GDPhotoPath)"
+                                       target="_blank">
+
+                                        <img src="@Url.Content(ViewBag.GDInfo.GDPhotoPath)"
+                                             alt="GD Photo"
+                                             class="img-thumbnail rounded-3"
+                                             style="width: 180px; height: 180px; object-fit: cover; cursor: pointer;" />
+
+                                    </a>
+
+                                    <div class="small text-muted mt-2">
+                                        Click the image to view full size.
+                                    </div>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-12">
+                                    <div class="text-muted">
+                                        No GD photo uploaded.
+                                    </div>
+                                </div>
+                            }
+                             
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border rounded-3">
+                            <span class="text-muted">
+                                GD information has not been added yet.
+                            </span>
+                        </div>
+
+                        <a asp-controller="GDInfo"
+                           asp-action="Create"
+                           asp-route-caseId="@Model.CaseId"
+                           class="btn btn-primary rounded-3">
+                            Add GD Information
+                        </a>
+                    }
+
+                    <!-- CASE STATUS -->
+
+                    <hr class="my-4" />
+
+                    <h5 class="fw-bold mb-4">
+                        Case Status
+                    </h5>
+
+                    <div class="p-4 bg-light rounded-4">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="fs-3">
+                                📱
+                            </div>
+
+                            <div>
+                                <div class="fw-bold">
+                                    Report Submitted
+                                </div>
+
+                                <small class="text-muted">
+                                    Your lost phone report has been submitted successfully.
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                   <hr class="my-4" />
+
+<h5 class="fw-bold mb-4">
+    Update Case Status
+</h5>
+
+<form asp-controller="LostPhoneReports"
+      asp-action="UpdateStatus"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="caseId"
+           value="@Model.CaseId" />
+
+    <div class="row g-3">
+
+        <div class="col-md-8">
+
+            <select name="status"
+                    class="form-select">
+
+                <option value="Submitted"
+                        selected="@(Model.Status == "Submitted")">
+                    Submitted
+                </option>
+
+                <option value="Under Review"
+                        selected="@(Model.Status == "Under Review")">
+                    Under Review
+                </option>
+
+                <option value="Verified"
+                        selected="@(Model.Status == "Verified")">
+                    Verified
+                </option>
+
+                <option value="Match Found"
+                        selected="@(Model.Status == "Match Found")">
+                    Match Found
+                </option>
+
+                <option value="Recovery in Progress"
+                        selected="@(Model.Status == "Recovery in Progress")">
+                    Recovery in Progress
+                </option>
+
+                <option value="Solved"
+                        selected="@(Model.Status == "Solved")">
+                    Solved
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <button type="submit"
+                    class="btn btn-primary w-100 rounded-3">
+
+                Update Status
+
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+                    
+                    
+                    <div class="mt-4">
+
+                        <a asp-controller="LostPhoneReports"
+                           asp-action="MyReports"
+                           class="btn btn-outline-secondary rounded-3">
+                            ← Back to My Reports
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
