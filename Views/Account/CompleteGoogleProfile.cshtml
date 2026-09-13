@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Complete Your Profile";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+
+                <div class="text-center mb-4">
+                    <div style="font-size: 50px;">🔐</div>
+
+                    <h2 class="fw-bold mt-2">
+                        Complete Your Profile
+                    </h2>
+
+                    <p class="text-muted">
+                        One more step before entering MobileTracker.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        Google Email
+                    </label>
+
+                    <input type="text"
+                           class="form-control rounded-3"
+                           value="@ViewBag.GoogleEmail"
+                           readonly />
+                </div>
+
+                <form asp-action="CompleteGoogleProfile"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-4">
+                        <label for="mobileNumber"
+                               class="form-label fw-semibold">
+                            Mobile Number
+                        </label>
+
+                        <input type="text"
+                               id="mobileNumber"
+                               name="mobileNumber"
+                               class="form-control rounded-3"
+                               placeholder="01XXXXXXXXX"
+                               maxlength="11"
+                               required />
+
+                        <div class="form-text">
+                            Enter your Bangladeshi mobile number.
+                        </div>
+
+                        @Html.ValidationMessage(
+                            "mobileNumber",
+                            "",
+                            new { @class = "text-danger" })
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary w-100 rounded-3 py-2">
+                        Complete Registration
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>

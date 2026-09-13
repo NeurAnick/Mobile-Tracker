@@ -1,0 +1,359 @@
+﻿@model MobileTracker.Models.User
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<style>
+    .register-page {
+        padding: 60px 0 80px;
+        background: #f8f9fa;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .register-card {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
+        padding: 40px 36px;
+        max-width: 460px;
+        margin: 0 auto;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+        .register-header .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .register-header h3 {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        .register-header p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 4px 0 0;
+        }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+        .form-group label {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-group .input-group {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.2s;
+            background: #f8f9fa;
+        }
+
+            .form-group .input-group:focus-within {
+                border-color: #1a1a2e;
+                background: #ffffff;
+                box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.06);
+            }
+
+        .form-group .input-group-text {
+            background: transparent;
+            border: none;
+            color: #6c757d;
+            padding: 0 0 0 14px;
+        }
+
+        .form-group .form-control {
+            border: none;
+            background: transparent;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            color: #1a1a2e;
+        }
+
+            .form-group .form-control:focus {
+                box-shadow: none;
+                background: transparent;
+            }
+
+            .form-group .form-control::placeholder {
+                color: #adb5bd;
+            }
+
+        .form-group .text-danger {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            display: block;
+        }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .password-hint {
+        color: #6c757d;
+        font-size: 0.8rem;
+        margin-top: 4px;
+    }
+
+    .btn-register {
+        background: #1a1a2e;
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        width: 100%;
+        transition: 0.2s;
+        cursor: pointer;
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .btn-register:hover {
+            background: #2d2d44;
+            transform: translateY(-2px);
+        }
+
+    .register-footer {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+
+        .register-footer p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .register-footer a {
+            color: #1a1a2e;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .register-footer a:hover {
+                text-decoration: underline;
+            }
+
+    .validation-summary {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        border: 1px solid #f5c6cb;
+    }
+
+        .validation-summary ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: #6c757d;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+        .back-link:hover {
+            color: #1a1a2e;
+        }
+
+    .terms-text {
+        color: #6c757d;
+        font-size: 0.8rem;
+        text-align: center;
+        margin-top: 16px;
+    }
+
+        .terms-text a {
+            color: #1a1a2e;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .terms-text a:hover {
+                text-decoration: underline;
+            }
+
+    @@media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .register-card {
+            padding: 28px 20px;
+        }
+
+        .register-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .btn-register {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+    }
+</style>
+
+<div class="register-page">
+    <div class="container">
+
+        <div class="register-card">
+            <div class="register-header">
+                <h3>Create Account</h3>
+                <p>Join Mobile Tracker today</p>
+            </div>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="validation-summary">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+            }
+            <form asp-action="Signup" method="post">
+                <div class="form-group">
+                    <label asp-for="FullName">Full Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="Email">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="you@example.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MobileNumber">Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                            <input asp-for="MobileNumber" class="form-control" placeholder="01XXXXXXXXX" />
+                        </div>
+                        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="PasswordHash">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input asp-for="PasswordHash" type="password" class="form-control" placeholder="Create a password" />
+                        </div>
+                        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                        <div class="password-hint">Minimum 6 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                            <input type="password"
+                                   class="form-control"
+                                   id="ConfirmPassword"
+                                   name="ConfirmPassword"
+                                   placeholder="Confirm your password" />
+                        </div>
+
+                        <span class="text-danger">
+                            @Html.ValidationMessage("ConfirmPassword")
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">
+    <div class="form-check">
+        <input class="form-check-input"
+               type="checkbox"
+               id="AcceptPolicy"
+               name="AcceptPolicy"
+               value="true" />
+
+        <label class="form-check-label" for="AcceptPolicy">
+            I have read and agree to the
+            <a asp-controller="Account"
+               asp-action="Policy"
+               target="_blank">
+                MobileTracker Policy
+            </a>.
+        </label>
+    </div>
+
+    <span class="text-danger">
+        @Html.ValidationMessage("AcceptPolicy")
+    </span>
+</div>
+                
+                <button type="submit" class="btn-register">
+                    <i class="bi bi-person-plus"></i> Create Account
+                </button>
+
+            </form>
+
+            <div class="terms-text">
+                By creating an account, you agree to our
+                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </div>
+
+            <div class="register-footer">
+                <p>
+                    Already have an account?
+                    <a asp-controller="Account" asp-action="Login">Login</a>
+                </p>
+            </div>
+
+            <a asp-controller="Home" asp-action="Index" class="back-link">
+                <i class="bi bi-arrow-left me-1"></i> Back to Home
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
