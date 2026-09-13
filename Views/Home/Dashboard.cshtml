@@ -1,0 +1,366 @@
+﻿@model List<MobileTracker.Models.LostPhoneReport>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .dashboard-page {
+        background: #f8fafc;
+        min-height: 82vh;
+        padding: 45px 0 70px;
+    }
+
+    .welcome-card {
+        background: linear-gradient(135deg, #172554, #2563eb);
+        color: white;
+        border-radius: 26px;
+        padding: 35px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .welcome-card::after {
+            content: "📱";
+            position: absolute;
+            right: 45px;
+            top: 20px;
+            font-size: 100px;
+            opacity: 0.12;
+        }
+
+    .welcome-title {
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .stat-card {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        padding: 25px;
+        height: 100%;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #172554;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .action-card {
+        background: white;
+        border: none;
+        border-radius: 22px;
+        padding: 30px;
+        height: 100%;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+        transition: 0.25s ease;
+    }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.10);
+        }
+
+    .action-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 16px;
+        background: #eff6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        margin-bottom: 18px;
+    }
+
+    .case-card {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .case-id {
+        color: #2563eb;
+        font-weight: 800;
+    }
+
+    .status-badge {
+        background: #eff6ff;
+        color: #2563eb;
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+</style>
+
+
+<div class="dashboard-page">
+
+    <div class="container">
+
+        <div class="welcome-card mb-4">
+
+            <div class="position-relative">
+
+                <p class="mb-2 opacity-75">
+                    Mobile Tracker Dashboard
+                </p>
+
+                <h1 class="welcome-title">
+                    Welcome, @ViewBag.UserName!
+                </h1>
+
+                <p class="mb-0 opacity-75">
+                    Manage your lost phone reports from one place.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-number">
+                        @ViewBag.TotalReports
+                    </div>
+
+                    <div class="stat-label">
+                        Total Reports
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-number">
+                        @ViewBag.ActiveCases
+                    </div>
+
+                    <div class="stat-label">
+                        Active Cases
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-number">
+                        @ViewBag.ResolvedCases
+                    </div>
+
+                    <div class="stat-label">
+                        Resolved Cases
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-4">
+
+            <h3 class="fw-bold">
+                Quick Actions
+            </h3>
+
+            <p class="text-muted">
+                What would you like to do today?
+            </p>
+
+        </div>
+
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-6">
+
+                <div class="action-card">
+
+                    <div class="action-icon">
+                        📱
+                    </div>
+
+                    <h5 class="fw-bold">
+                        Report Lost Phone
+                    </h5>
+
+                    <p class="text-muted">
+                        Submit the details of your lost device
+                        and receive a unique Case ID.
+                    </p>
+
+                    <a asp-controller="LostPhoneReports"
+                       asp-action="Create"
+                       class="btn btn-primary rounded-3 px-4">
+                        Report Phone →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+                <div class="action-card">
+
+                    <div class="action-icon">
+                        📋
+                    </div>
+
+                    <h5 class="fw-bold">
+                        My Reports
+                    </h5>
+
+                    <p class="text-muted">
+                        View and manage the lost phone reports
+                        submitted from your account.
+                    </p>
+
+                    <a asp-controller="LostPhoneReports"
+                       asp-action="MyReports"
+                       class="btn btn-outline-primary rounded-3 px-4">
+                        View My Reports →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-4">
+
+            <h3 class="fw-bold">
+                Recent Reports
+            </h3>
+
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-3">
+
+                @foreach (var report in Model.OrderByDescending(r => r.SubmittedAt).Take(3))
+                {
+                    <div class="col-12">
+
+                        <div class="case-card">
+
+                            <div class="row align-items-center">
+
+                                <div class="col-md-3">
+
+                                    <small class="text-muted">
+                                        Case ID
+                                    </small>
+
+                                    <div class="case-id">
+                                        #@report.CaseId
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <small class="text-muted">
+                                        Device
+                                    </small>
+
+                                    <div class="fw-semibold">
+                                        @report.Brand @report.Model
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <small class="text-muted">
+                                        Location
+                                    </small>
+
+                                    <div class="fw-semibold">
+                                        @report.LocationLost
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-3 text-md-end">
+
+                                    <span class="status-badge">
+                                        @report.Status
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="case-card text-center py-5">
+
+                <div class="fs-1 mb-3">
+                    📭
+                </div>
+
+                <h5 class="fw-bold">
+                    No reports yet
+                </h5>
+
+                <p class="text-muted">
+                    You haven't submitted any lost phone reports.
+                </p>
+
+                <a asp-controller="LostPhoneReports"
+                   asp-action="Create"
+                   class="btn btn-primary rounded-3">
+                    Report Your Phone
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>
