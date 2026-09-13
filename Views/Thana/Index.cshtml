@@ -1,0 +1,57 @@
+﻿@model List<MobileTracker.Models.Thana>
+
+@{
+    ViewData["Title"] = "Thana Directory";
+}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+            Thana Directory
+        </h1>
+
+        <p class="text-muted">
+            Browse police stations and view their performance information.
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        @foreach (var thana in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                    <div class="card-body p-4">
+
+                        <h4 class="fw-bold mb-2">
+                            @thana.ThanaName
+                        </h4>
+
+                        <p class="text-muted mb-4">
+                            📍 @thana.District
+                        </p>
+
+                        <a asp-controller="Thana"
+                           asp-action="Profile"
+                           asp-route-id="@thana.ThanaId"
+                           class="btn btn-primary rounded-3">
+
+                            View Thana Profile →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

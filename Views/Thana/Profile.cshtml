@@ -1,0 +1,402 @@
+﻿@model MobileTracker.Models.Thana
+
+@{
+    ViewData["Title"] = "Thana Profile";
+}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+
+        <p class="text-muted mb-1">
+            Thana Profile
+        </p>
+
+        <h1 class="fw-bold">
+            @Model.ThanaName Thana
+        </h1>
+
+        <p class="text-muted">
+            📍 @Model.District
+        </p>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="row g-4 mb-5">
+
+        <!-- Total Reported -->
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="fs-2 mb-2">
+                        📱
+                    </div>
+
+                    <h6 class="text-muted">
+                        Total Reported
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        @ViewBag.TotalReported
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Active -->
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="fs-2 mb-2">
+                        🔄
+                    </div>
+
+                    <h6 class="text-muted">
+                        Active Cases
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        @ViewBag.ActiveCases
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Recovered -->
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="fs-2 mb-2">
+                        ✅
+                    </div>
+
+                    <h6 class="text-muted">
+                        Recovered
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        @ViewBag.RecoveredCases
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending -->
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="fs-2 mb-2">
+                        ⏳
+                    </div>
+
+                    <h6 class="text-muted">
+                        Pending
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        @ViewBag.PendingCases
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Performance -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <h4 class="fw-bold mb-4">
+                Recovery Performance
+            </h4>
+
+
+            <!-- Recovery Rate -->
+            <div class="mb-4">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="fw-semibold">
+                        Recovery Rate
+                    </span>
+
+                    <span class="fw-bold">
+                        @ViewBag.RecoveryRate.ToString("0.0")%
+                    </span>
+
+                </div>
+
+                <div class="progress"
+                     style="height: 12px;">
+
+                    <div class="progress-bar bg-success"
+                         role="progressbar"
+                         style="width: @ViewBag.RecoveryRate%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Unresolved Rate -->
+            <div>
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="fw-semibold">
+                        Unresolved Rate
+                    </span>
+
+                    <span class="fw-bold">
+                        @ViewBag.UnresolvedRate.ToString("0.0")%
+                    </span>
+
+                </div>
+
+                <div class="progress"
+                     style="height: 12px;">
+
+                    <div class="progress-bar bg-secondary"
+                         role="progressbar"
+                         style="width: @ViewBag.UnresolvedRate%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Case Outcome Chart -->
+    <div class="card border-0 shadow-sm rounded-4 mt-4">
+
+        <div class="card-body p-4 p-md-5">
+
+            <h4 class="fw-bold mb-4">
+                Case Outcome
+            </h4>
+
+            @if ((int)ViewBag.TotalReported > 0)
+            {
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+
+                        <div style="height: 280px;">
+                            <canvas id="caseOutcomeChart"></canvas>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-4">
+
+                            <div class="d-flex justify-content-between mb-2">
+
+                                <span class="fw-semibold">
+                                    Recovered
+                                </span>
+
+                                <span class="fw-bold">
+                                    @ViewBag.RecoveredCases
+                                </span>
+
+                            </div>
+
+                            <div class="progress"
+                                 style="height: 10px;">
+
+                                <div class="progress-bar bg-success"
+                                     style="width: @ViewBag.RecoveryRate%;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="d-flex justify-content-between mb-2">
+
+                                <span class="fw-semibold">
+                                    Unresolved
+                                </span>
+
+                                <span class="fw-bold">
+                                    @(ViewBag.TotalReported - ViewBag.RecoveredCases)
+                                </span>
+
+                            </div>
+
+                            <div class="progress"
+                                 style="height: 10px;">
+
+                                <div class="progress-bar bg-secondary"
+                                     style="width: @ViewBag.UnresolvedRate%;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-4">
+
+                    No case data is available for this Thana yet.
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- Average Resolution Time -->
+    <div class="card border-0 shadow-sm rounded-4 mt-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="fs-2">
+                    ⏱️
+                </div>
+
+                <div>
+
+                    <h6 class="text-muted mb-1">
+                        Average Resolution Time
+                    </h6>
+
+                    @if (ViewBag.AverageResolutionDays > 0)
+                    {
+                        <h3 class="fw-bold mb-0">
+                            @ViewBag.AverageResolutionDays.ToString("0.0") days
+                        </h3>
+                    }
+                    else
+                    {
+                        <h5 class="fw-semibold text-muted mb-0">
+                            No solved cases yet
+                        </h5>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+            const totalReported = @ViewBag.TotalReported;
+            const recoveredCases = @ViewBag.RecoveredCases;
+            const unresolvedCases = totalReported - recoveredCases;
+
+            if (totalReported > 0)
+            {
+                const ctx = document
+                    .getElementById('caseOutcomeChart');
+
+                new Chart(ctx,
+                {
+                    type: 'doughnut',
+
+                    data:
+                    {
+                        labels:
+                        [
+                            'Recovered',
+                            'Unresolved'
+                        ],
+
+                        datasets:
+                        [{
+                            data:
+                            [
+                                recoveredCases,
+                                unresolvedCases
+                            ]
+                        }]
+                    },
+
+                    options:
+                    {
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins:
+                        {
+                            legend:
+                            {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+    </script>
+
+    <!-- Back -->
+    <div class="mt-4">
+
+        <a asp-controller="Thana"
+           asp-action="Index"
+           class="btn btn-outline-secondary rounded-3">
+
+            ← Back to Thana Directory
+
+        </a>
+
+    </div>
+
+</div>

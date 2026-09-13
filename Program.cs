@@ -1,3 +1,6 @@
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using MobileTracker.Data;
 using MobileTracker.Services;
@@ -18,6 +21,27 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme =
+        CookieAuthenticationDefaults.AuthenticationScheme;
+
+    options.DefaultSignInScheme =
+        CookieAuthenticationDefaults.AuthenticationScheme;
+
+    options.DefaultChallengeScheme =
+        GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(options =>
+{
+    options.ClientId =
+        builder.Configuration["Authentication:Google:ClientId"]!;
+
+    options.ClientSecret =
+        builder.Configuration["Authentication:Google:ClientSecret"]!;
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<EmailService>();
 
@@ -30,15 +54,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
 app.UseSession();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.MapControllerRoute(
+app.MapControllerRoute( 
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
