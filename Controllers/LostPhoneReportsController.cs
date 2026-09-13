@@ -36,7 +36,7 @@ namespace MobileTracker.Controllers
             }
 
             report.UserId = userId.Value;
-            report.UserId = userId.Value;
+            
 
             // Check if Date of Loss is in the future
             if (report.DateOfLoss.Date > DateTime.UtcNow.Date)
@@ -75,6 +75,18 @@ namespace MobileTracker.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Save initial status history
+            var statusHistory = new CaseStatusHistory
+            {
+                CaseId = report.CaseId,
+                Status = "Submitted",
+                ChangedAt = DateTime.UtcNow
+            };
+
+            _context.CaseStatusHistories.Add(statusHistory);
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Success", new { id = report.CaseId });
         }
 
@@ -109,6 +121,7 @@ namespace MobileTracker.Controllers
         // =========================
         // REPORT DETAILS
         // =========================
+        
         public async Task<IActionResult> Details(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -128,7 +141,82 @@ namespace MobileTracker.Controllers
                 return NotFound();
             }
 
+            // Get GD information for this case
+            var gdInfo = await _context.GDInfos
+                .Include(g => g.Thana)
+                .FirstOrDefaultAsync(g => g.CaseId == id);
+
+            // Send GD information to the Details page
+            ViewBag.GDInfo = gdInfo;
+
             return View(report);
+        }
+        // =========================
+        // UPDATE CASE STATUS
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int caseId, string status)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Find only the logged-in user's case
+            var report = await _context.LostPhoneReports
+                .FirstOrDefaultAsync(r =>
+                    r.CaseId == caseId &&
+                    r.UserId == userId.Value);
+
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            // Allowed statuses
+            var allowedStatuses = new[]
+            {
+        "Submitted",
+        "Under Review",
+        "Verified",
+        "Match Found",
+        "Recovery in Progress",
+        "Solved"
+    };
+
+            if (!allowedStatuses.Contains(status))
+            {
+                return BadRequest();
+            }
+
+            // Update current status
+            report.Status = status;
+
+            // If solved, save solved time
+            if (status == "Solved")
+            {
+                report.SolvedAt = DateTime.UtcNow;
+            }
+
+            // Save status history
+            var statusHistory = new CaseStatusHistory
+            {
+                CaseId = report.CaseId,
+                Status = status,
+                ChangedAt = DateTime.UtcNow
+            };
+
+            _context.CaseStatusHistories.Add(statusHistory);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(
+                "Details",
+                new { id = caseId }
+            );
         }
     }
 }
